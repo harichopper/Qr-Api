@@ -1,4 +1,3 @@
-// api/generate.js
 import QRCode from 'qrcode';
 import axios from 'axios';
 
@@ -9,14 +8,16 @@ export default async function handler(req, res) {
     return res.status(400).send('Missing `data` parameter');
   }
 
-  // Optional: TinyURL shortening for long URLs
+  // Optional: Shorten long URLs
   let finalData = data;
   if (data.length > 100 && data.startsWith('http')) {
     try {
-      const response = await axios.get(`https://tinyurl.com/api-create.php?url=${encodeURIComponent(data)}`);
+      const response = await axios.get(
+        `https://tinyurl.com/api-create.php?url=${encodeURIComponent(data)}`
+      );
       finalData = response.data;
-    } catch (err) {
-      console.warn('TinyURL failed. Using original URL.');
+    } catch (error) {
+      console.warn('TinyURL failed. Using original data.');
     }
   }
 
@@ -31,4 +32,6 @@ export default async function handler(req, res) {
     res.status(200).send(buffer);
   } catch (err) {
     console.error('QR Generation Error:', err);
-    res.status(500).send('QR generation failed
+    res.status(500).send('Failed to generate QR');
+  }
+}
