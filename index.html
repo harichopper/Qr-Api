@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>QR Code Generator</title>
+</head>
+<body>
+  <h1>QR Code Generator</h1>
+  <input type="text" id="textInput" placeholder="Enter text or URL" />
+  <button onclick="generateQRCode()">Generate</button>
+
+  <h3>Result:</h3>
+  <img id="qrImage" src="" alt="QR Code will appear here" />
+
+  <script>
+    async function generateQRCode() {
+      const text = document.getElementById('textInput').value;
+      const response = await fetch(`http://localhost:5000/generate?data=${encodeURIComponent(text)}`);
+      const data = await response.json();
+      document.getElementById('qrImage').src = data.qrImage;
+    }
+  </script>
+</body>
+</html>
