@@ -1,10 +1,12 @@
+// api/generate.js
+
 import QRCode from 'qrcode';
 
 export default async function handler(req, res) {
   const { data } = req.query;
 
   if (!data) {
-    return res.status(400).send('Missing data');
+    return res.status(400).send('Missing `data` parameter');
   }
 
   try {
@@ -17,6 +19,7 @@ export default async function handler(req, res) {
     res.setHeader('Content-Type', 'image/png');
     res.status(200).send(buffer);
   } catch (err) {
+    console.error('QR generation error:', err);
     res.status(500).send('QR generation failed');
   }
 }
